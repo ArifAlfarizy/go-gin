@@ -16,6 +16,12 @@ func GetAllTodos() ([]models.Todo, error) { // Expecting result todo models or a
 	return todos, result.Error
 }
 
+func GetTodoById(id uint) (models.Todo, error)  {
+	var todo models.Todo
+	result := config.DB.First(&todo, id)
+	return todo, result.Error
+}
+
 func CreateTodo(todo models.Todo) (models.Todo, error) {
 	result := config.DB.Create(&todo)
 
