@@ -90,3 +90,47 @@ func CreateTodo(c *gin.Context) {
 	// Response
 	c.JSON(http.StatusCreated, todo)
 }
+
+func UpdateTodo(c *gin.Context) {
+	// Get id from param
+	idParam := c.Param("id")
+	id, err := strconv.Atoi(idParam)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
+		return
+	}
+
+	var req dto.UpdateTodoRequest
+
+	if err := c.BindJSON(&req); err != nil {
+		c.JSON((http.StatusBadRequest), gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	// Mapping, req is being used here
+	todo := models.Todo{
+		Title:     req.Title,
+		Completed: req.Completed,
+	}
+
+	todo, err = services.UpdateTodo(uint(id), todo)
+
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Todo not found"})
+			return
+		}
+
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	// Response
+	c.JSON(http.StatusAccepted, todo)
+
+}

@@ -7,7 +7,6 @@ import (
 
 // Query to database
 
-
 func GetAllTodos() ([]models.Todo, error) { // Expecting result todo models or an error
 	var todos []models.Todo
 
@@ -16,7 +15,7 @@ func GetAllTodos() ([]models.Todo, error) { // Expecting result todo models or a
 	return todos, result.Error
 }
 
-func GetTodoById(id uint) (models.Todo, error)  {
+func GetTodoById(id uint) (models.Todo, error) {
 	var todo models.Todo
 	result := config.DB.First(&todo, id)
 	return todo, result.Error
@@ -28,7 +27,14 @@ func CreateTodo(todo models.Todo) (models.Todo, error) {
 	return todo, result.Error
 }
 
-func DeleteTodo(id uint) error {	// Find models.todo, with id: then delete
+func UpdateTodo(id uint, todo models.Todo) (models.Todo, error) {
+	config.DB.Model(&models.Todo{}).Where("id = ?", id).Updates(todo)
+	var updated models.Todo
+	result := config.DB.First(&updated, id)
+	return updated, result.Error
+}
+
+func DeleteTodo(id uint) error { // Find models.todo, with id: then delete
 	result := config.DB.Delete(&models.Todo{}, id)
 
 	return result.Error
