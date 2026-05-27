@@ -3,6 +3,8 @@ package services
 import (
 	"gin-test/config"
 	"gin-test/internal/models"
+
+	"gorm.io/gorm"
 )
 
 // Query to database
@@ -36,6 +38,9 @@ func UpdateTodo(id uint, todo models.Todo) (models.Todo, error) {
 
 func DeleteTodo(id uint) error { // Find models.todo, with id: then delete
 	result := config.DB.Delete(&models.Todo{}, id)
+	if result.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
 
 	return result.Error
 }
