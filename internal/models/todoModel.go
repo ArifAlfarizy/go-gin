@@ -11,6 +11,8 @@ type Model struct {
 }
 */
 
+
+// Represent data
 type Todo struct { // JSON tag				// GORM tag
 	gorm.Model
 	Title     string `json:"title"`

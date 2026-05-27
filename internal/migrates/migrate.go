@@ -1,4 +1,4 @@
-package main
+package migrates
 
 import (
 	"gin-test/config"
@@ -11,7 +11,7 @@ func init() {
 	config.ConnectDB()
 }
 
-func main() {
+func Migrate() {
 	var err error
 
 	err = config.DB.AutoMigrate(&models.Todo{})
