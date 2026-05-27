@@ -9,6 +9,7 @@ import (
 func TodoRoutes(router *gin.Engine) {
 	todoGroup := router.Group("/todo")
 	{
+		todoGroup.GET("/", controllers.GetAllTodos)
 		todoGroup.POST("/", controllers.CreateTodo)
 	}
 }

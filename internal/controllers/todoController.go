@@ -8,7 +8,23 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// temporary, need to separate query and logic layers
+// Use http instead of code error
+
+func GetAllTodos(c *gin.Context) {
+	todos, err := services.GetAllTodos()
+
+	if err != nil {
+		c.JSON(500, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	// Response
+	c.JSON(200, todos)
+
+} 
+
 
 func CreateTodo(c *gin.Context) {
 	// Get data off req body
